@@ -9,5 +9,8 @@ Valkuil kuil = new Valkuil();
 
 Detectielus lus = new Detectielus();
 
+lus.Detect += tl.Aan;
+lus.Detect += hek.Open;
+lus.Detect += kuil.Open;
 
 lus.OnDetect();
