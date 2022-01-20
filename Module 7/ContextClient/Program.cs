@@ -2,8 +2,9 @@
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using Bogus;
+using Microsoft.Extensions.Logging;
 
-string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=HobbyDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+string conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=HobbyDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=true;";
 
 //CreateDataBase();
 //CreateData();
@@ -13,7 +14,8 @@ void LinqTest()
 {
     DbContextOptionsBuilder bld = new DbContextOptionsBuilder();
     bld.UseSqlServer(conStr);
-    //bld.LogTo(m=>System.Console.WriteLine(m));
+   // bld.UseLazyLoadingProxies();
+    bld.LogTo(m=>System.Console.WriteLine(m), LogLevel.Information);
 
     HobbyContext context = new HobbyContext(bld.Options);
     
@@ -39,17 +41,20 @@ void LinqTest()
     }
 
     var q4 = context.People
-        .Include(p=>p.Hobbies)
-            .ThenInclude(ph=>ph.Hobby)
+         .Include(p=>p.Hobbies)
+             .ThenInclude(ph=>ph.Hobby)
         .Take(10);
         //.AsNoTracking();
     foreach(var p in q4)
     {
-       System.Console.WriteLine($"[{p.Id}] {p.FirstName} {p.LastName} ({p.Age})");
-       foreach(var ph in p.Hobbies)
-       {
-           System.Console.WriteLine($"\t{ph?.Hobby?.Description}");
-       }
+        System.Console.WriteLine(p.GetType().Name);
+        System.Console.WriteLine($"[{p.Id}] {p.FirstName} {p.LastName} ({p.Age})");
+        //context.Entry(p).Collection(nameof(p.Hobbies)).Load();
+        foreach(var ph in p.Hobbies)
+        {
+            //context.Entry(ph).Reference(nameof(ph.Hobby)).Load();
+            System.Console.WriteLine($"\t{ph?.Hobby?.Description}");
+        }
     }
 
     var p1 = context.People.First();

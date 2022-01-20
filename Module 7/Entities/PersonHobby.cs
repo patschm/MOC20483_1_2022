@@ -5,7 +5,7 @@ namespace Entities
         public int PersonId { get; set; }
         public int HobbyId { get; set; }
 
-        public Person? Person { get; set; }
-        public Hobby? Hobby { get; set; }
+        public virtual Person? Person { get; set; }
+        public virtual Hobby? Hobby { get; set; }
     }
 }

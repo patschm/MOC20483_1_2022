@@ -30,12 +30,14 @@ foreach(int nr in list)
     System.Console.WriteLine($"foreach {nr}");
 }
 
-StringBuilder txt = new StringBuilder();
+//StringBuilder txt = new StringBuilder();
+string txt = "";
 Stopwatch sw = new Stopwatch();
 sw.Start();
 for(int i = 0; i < 100000; i++)
 {
-    txt.Append(i);
+    //txt.Append(i);
+    txt += i;
 }
 sw.Stop();
 System.Console.WriteLine(sw.Elapsed);
